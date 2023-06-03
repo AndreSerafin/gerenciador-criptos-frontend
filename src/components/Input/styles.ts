@@ -1,26 +1,30 @@
 import styled from 'styled-components'
 
 interface Input {
-  width: string
+  width?: string
 }
 
 export const InputContainer = styled.div<Input>`
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
   position: relative;
   border-radius: 4px;
   width: ${(props) => props.width};
-  padding: 0.875rem 1.25rem;
+  height: 3rem;
   background: ${(props) => props.theme['purple-600']};
 
   > div {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
 
     input {
       display: flex;
-      flex: 1;
+      flex: 10;
+      height: 100%;
       color: ${(props) => props.theme['text-color']};
-
       &::placeholder {
         font-weight: bold;
       }
@@ -47,6 +51,7 @@ export const InputContainer = styled.div<Input>`
   }
 
   svg {
+    flex: 1;
     color: ${(props) => props.theme['placeholder-color']};
   }
 

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import * as Dialog from '@radix-ui/react-dialog'
 
 export const Header = styled.header`
   background: ${(props) => props.theme['purple-700']};
@@ -31,31 +32,23 @@ export const MainContainer = styled.main`
   }
 `
 
-interface ButtonVariation {
-  variant: 'signin' | 'signup'
-}
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`
 
-export const Button = styled.button<ButtonVariation>`
+export const Trigger = styled(Dialog.Trigger)`
+  background: ${(props) => props.theme['purple-400']};
   font-size: 1rem;
+  color: ${(props) => props.theme['text-color']};
   padding: 0.875rem 0;
   border-radius: 4px;
-  color: ${(props) => props.theme['text-color']};
   font-weight: bold;
   cursor: pointer;
-
-  background: ${(props) =>
-    props.variant === 'signin'
-      ? props.theme['purple-400']
-      : props.theme['purple-300']};
 
   &:hover {
     filter: brightness(1.3);
     transition: filter 0.5s;
   }
-`
-
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 `

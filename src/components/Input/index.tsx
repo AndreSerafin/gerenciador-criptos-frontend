@@ -1,12 +1,16 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { InputContainer } from './styles'
+import { UseFormRegisterReturn } from 'react-hook-form'
 
-interface InputWithIconProps {
-  iconStart?: React.ReactNode
-  iconEnd?: React.ReactNode
-  type: 'password' | 'email' | 'text'
-  width: string
+interface InputProps {
+  iconStart?: ReactNode
+  iconEnd?: ReactNode
+  type: string
+  width?: string
   placeholder?: string
+  required?: boolean
+  register?: UseFormRegisterReturn
+  autoComplete?: 'on' | 'off'
 }
 
 export function Input({
@@ -15,12 +19,21 @@ export function Input({
   type,
   width,
   placeholder,
-}: InputWithIconProps) {
+  required,
+  register,
+  autoComplete,
+}: InputProps) {
   return (
     <InputContainer width={width}>
       <div>
-        <label htmlFor={type}>{iconStart}</label>
-        <input type={type} id={type} required />
+        <label htmlFor={placeholder}>{iconStart}</label>
+        <input
+          autoComplete={autoComplete}
+          type={type}
+          id={placeholder}
+          required={required}
+          {...register}
+        />
         {iconEnd}
         <span>{placeholder}</span>
       </div>
