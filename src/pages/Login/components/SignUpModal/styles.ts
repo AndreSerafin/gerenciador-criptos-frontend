@@ -51,6 +51,9 @@ export const Content = styled(Dialog.Content)`
       transform: translate(-50%, -50%) scale(1);
     }
   }
+  &:focus {
+    outline: none;
+  }
 `
 
 export const SignupForm = styled.form`
@@ -61,6 +64,11 @@ export const SignupForm = styled.form`
   > div {
     display: flex;
     justify-content: space-between;
+  }
+
+  p {
+    color: ${(props) => props.theme['red-300']};
+    font-size: 0.75rem;
   }
 `
 export const Close = styled(Dialog.DialogClose)`

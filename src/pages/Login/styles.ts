@@ -29,6 +29,11 @@ export const MainContainer = styled.main`
     h1 {
       font-size: 2rem;
     }
+
+    p {
+      color: ${(props) => props.theme['red-300']};
+      font-size: 0.75rem;
+    }
   }
 `
 

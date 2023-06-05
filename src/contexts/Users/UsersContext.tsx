@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useState } from 'react'
-import { api } from '../services/api'
+import { createContext, ReactNode, useContext } from 'react'
+import { api } from '../../services/api'
+import { AuthContext } from '../Auth/AuthContext'
 
 interface CreateNewUser {
   name: string
@@ -18,8 +19,15 @@ interface UsersProviderProps {
 }
 
 export function UsersProvider({ children }: UsersProviderProps) {
+  const { changeLoadingState } = useContext(AuthContext)
   async function createNewUser(data: CreateNewUser) {
-    api.post('/user', data)
+    changeLoadingState(true)
+    try {
+      changeLoadingState(false)
+      await api.post('/user', data)
+    } catch (e) {
+      changeLoadingState(false)
+    }
   }
 
   return (

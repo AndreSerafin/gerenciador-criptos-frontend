@@ -5,21 +5,44 @@ import { Form, Header, MainContainer, Trigger } from './styles'
 import * as Dialog from '@radix-ui/react-dialog'
 import { SignUpModal } from './components/SignUpModal'
 import { Button } from '../../components/Button'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { AuthContext } from '../../contexts/Auth/AuthContext'
+import * as z from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Loading } from '../../components/Loading'
+
+const authUserFormSchema = z.object({
+  email: z.string().nonempty('* Campo obrigatório').email('* Email Inválido'),
+  password: z
+    .string()
+    .nonempty('* Campo obrigatório')
+    .min(6, '* A senha deve ter pelo menos 6 caracteres'),
+})
+
+type AuthUserFormInputs = z.infer<typeof authUserFormSchema>
 
 export function Login() {
+  const { signin, loading } = useContext(AuthContext)
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<AuthUserFormInputs>({
+    resolver: zodResolver(authUserFormSchema),
+  })
   const [openLoginModal, setOpenLoginModal] = useState(false)
   const [passwordVisibility, setPasswordVisibility] = useState('password')
 
   function handleOpenModal() {
-    if (openLoginModal === true) {
-      setOpenLoginModal(false)
-    } else {
-      setOpenLoginModal(true)
-    }
+    openLoginModal === true ? setOpenLoginModal(false) : setOpenLoginModal(true)
+  }
+  function handleAuthUser(data: AuthUserFormInputs) {
+    signin(data)
   }
   return (
     <>
+      {loading && <Loading />}
       <Header>
         <img src={logo} alt="" />
       </Header>
@@ -27,14 +50,16 @@ export function Login() {
       <MainContainer>
         <div>
           <h1>Seja Bem Vindo!</h1>
-          <Form action="">
+          <Form onSubmit={handleSubmit(handleAuthUser)}>
             <Input
               type="text"
               width="22rem"
               iconStart={<User size={23} />}
               placeholder="Digite seu email"
+              register={{ ...register('email') }}
               required
             />
+            {errors?.email && <p>{errors.email.message}</p>}
             <Input
               type={passwordVisibility}
               width="22rem"
@@ -57,9 +82,11 @@ export function Login() {
                   )}
                 </button>
               }
-              placeholder="Digite sua senha"
               required
+              placeholder="Digite sua senha"
+              register={{ ...register('password') }}
             />
+            {errors?.password && <p>{errors.password.message}</p>}
 
             <Button variant="confirm" type="submit">
               Entrar

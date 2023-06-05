@@ -3,17 +3,17 @@ import { ThemeProvider } from 'styled-components'
 import { Router } from './router/router'
 import { GlobalStyles } from './styles/GlobalStyles'
 import { defaultTheme } from './styles/Themes/DefaultTheme'
-import { UsersProvider } from './contexts/UsersContext'
+import { AuthProvider } from './contexts/Auth/AuthContext'
 
 export function App() {
   return (
-    <UsersProvider>
+    <AuthProvider>
       <ThemeProvider theme={defaultTheme}>
         <BrowserRouter>
           <Router />
         </BrowserRouter>
         <GlobalStyles />
       </ThemeProvider>
-    </UsersProvider>
+    </AuthProvider>
   )
 }
