@@ -6,9 +6,8 @@ interface User {
   password: string
 }
 
-interface AuthUser {
-  email: string
-  token?: string
+interface Token {
+  token: string
 }
 
 interface AuthProviderProps {
@@ -17,7 +16,7 @@ interface AuthProviderProps {
 
 interface AuthContextType {
   loading: boolean
-  user: AuthUser | null
+  verifyToken: (token: Token) => Promise<boolean>
   changeLoadingState: (state: boolean) => void
   signin: (user: User) => void
 }
@@ -26,29 +25,37 @@ export const AuthContext = createContext({} as AuthContextType)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(false)
-  const [user, setUser] = useState<AuthUser | null>(null)
 
   function changeLoadingState(state: boolean) {
     setLoading(state)
+  }
+
+  async function verifyToken(token: Token) {
+    try {
+      const response = await api.post('/login/validateToken', token)
+      const { valid } = await response.data
+      console.log(valid)
+      return valid
+    } catch (e) {}
   }
 
   async function signin(data: User) {
     setLoading(true)
     try {
       const response = await api.post('/login', data)
-      setLoading(false)
-      const { token } = { token: response?.data?.token }
-      localStorage.setItem('cripto', JSON.stringify(token))
       const { email } = data
-      setUser({ email, token })
+      setLoading(false)
+      const token = response?.data?.token
+      localStorage.setItem('cripto', JSON.stringify({ token, email }))
     } catch (e) {
-      alert('erro tente novamente')
       setLoading(false)
     }
   }
 
   return (
-    <AuthContext.Provider value={{ user, signin, loading, changeLoadingState }}>
+    <AuthContext.Provider
+      value={{ signin, loading, changeLoadingState, verifyToken }}
+    >
       {children}
     </AuthContext.Provider>
   )

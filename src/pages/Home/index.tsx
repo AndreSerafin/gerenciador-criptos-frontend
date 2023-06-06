@@ -1,15 +1,23 @@
-import { User } from 'phosphor-react'
-import { Input } from '../../components/Input'
-
+import { Header } from './styles'
+import logo from '../../assets/imgs/logo.svg'
+import { SignOut, UserCircle } from 'phosphor-react'
 export function Home() {
   return (
     <>
-      <Input
-        placeholder="Digite sua senha"
-        width="22rem"
-        iconStart={<User />}
-        type="text"
-      ></Input>
+      <Header>
+        <div>
+          <img src={logo} alt="" />
+          <div>
+            <span>
+              <UserCircle size={30} />
+              Perfil
+            </span>
+            <span>
+              <SignOut size={30} weight="bold" color="#eb414b" />
+            </span>
+          </div>
+        </div>
+      </Header>
     </>
   )
 }

@@ -11,6 +11,7 @@ import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loading } from '../../components/Loading'
+import { useNavigate } from 'react-router-dom'
 
 const authUserFormSchema = z.object({
   email: z.string().nonempty('* Campo obrigatório').email('* Email Inválido'),
@@ -23,7 +24,7 @@ const authUserFormSchema = z.object({
 type AuthUserFormInputs = z.infer<typeof authUserFormSchema>
 
 export function Login() {
-  const { signin, loading } = useContext(AuthContext)
+  const { signin, loading, user } = useContext(AuthContext)
   const {
     handleSubmit,
     register,
@@ -33,12 +34,13 @@ export function Login() {
   })
   const [openLoginModal, setOpenLoginModal] = useState(false)
   const [passwordVisibility, setPasswordVisibility] = useState('password')
-
+  const navigate = useNavigate()
   function handleOpenModal() {
     openLoginModal === true ? setOpenLoginModal(false) : setOpenLoginModal(true)
   }
   function handleAuthUser(data: AuthUserFormInputs) {
     signin(data)
+    navigate('/')
   }
   return (
     <>
